@@ -1,0 +1,76 @@
+
+@model IEnumerable<HospitalAppointment.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary">Hospital Appointment System</h2>
+
+    <p>Welcome, @ViewBag.PatientName</p>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Message"]
+        </div>
+    }
+
+    <form method="get" asp-action="Index" class="mb-3">
+        <label class="form-label">Select Specialization</label>
+        <select name="specialization" class="form-select">
+            <option value="">All Doctors</option>
+            <option value="Cardiologist">Cardiologist</option>
+            <option value="Dermatologist">Dermatologist</option>
+            <option value="Neurologist">Neurologist</option>
+        </select>
+
+        <button class="btn btn-primary mt-2" type="submit">
+            Filter
+        </button>
+    </form>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Specialization</th>
+                <th>Experience</th>
+                <th>Fee</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doctor in Model)
+            {
+                <tr>
+                    <td>@doctor.DoctorId</td>
+                    <td>@doctor.DoctorName</td>
+                    <td>@doctor.Specialization</td>
+                    <td>@doctor.Experience years</td>
+                    <td>₹@doctor.ConsultationFee</td>
+                    <td>
+                        <a asp-action="Details"
+                           asp-route-doctorId="@doctor.DoctorId"
+                           class="btn btn-info btn-sm">
+                            Details
+                        </a>
+
+                        <a asp-action="Appointment"
+                           asp-route-doctorId="@doctor.DoctorId"
+                           class="btn btn-success btn-sm">
+                            Book
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-controller="Home" asp-action="Posts"
+       class="btn btn-secondary">
+        View Posts
+    </a>
+</div>

@@ -1,0 +1,57 @@
+
+@model HospitalAppointment.Models.Appointment
+@using HospitalAppointment.Extensions
+
+@{
+    ViewData["Title"] = "Book Appointment";
+    var doctor = (HospitalAppointment.Models.Doctor)ViewBag.Doctor;
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary">Book Appointment</h2>
+
+    <div class="card p-4 shadow-sm">
+        <h5>Doctor: @doctor.DoctorName</h5>
+        <p>Specialization: @doctor.Specialization</p>
+        <p>Total Charge: ₹@doctor.CalculateTotalCharge()</p>
+
+        <form asp-action="Appointment" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="DoctorId" />
+
+            <div class="mb-3">
+                <label asp-for="PatientName"
+                       class="form-label">Patient Name</label>
+                <input asp-for="PatientName"
+                       class="form-control"
+                       placeholder="Enter patient name" />
+                <span asp-validation-for="PatientName"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AppointmentDate"
+                       class="form-label">Appointment Date</label>
+                <input asp-for="AppointmentDate"
+                       type="date"
+                       asp-format="{0:yyyy-MM-dd}"
+                       class="form-control" />
+                <span asp-validation-for="AppointmentDate"
+                      class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Submit Appointment
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
